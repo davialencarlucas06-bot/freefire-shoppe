@@ -1,196 +1,259 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-  <title>Mini Battle</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Battle Zone 3D</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <canvas id="game"></canvas>
+  <div id="game"></div>
 
-  <!-- HUD -->
-
-  <div id="hud">
-
-    <div id="topHud">
-
-      <div id="logo">
-        MINI <span>BATTLE</span>
-      </div>
-
-      <div id="vidaBox">
-        <div class="vidaTexto">VIDA</div>
-
-        <div class="vidaFundo">
-          <div id="vidaBarra"></div>
-        </div>
-
-        <div id="vidaNumero">100</div>
-      </div>
-
+  <!-- MENU INICIAL -->
+  <div id="startScreen" class="screen">
+    <div class="logo">
+      <span>BATTLE</span>
+      <strong>ZONE</strong>
+      <small>3D</small>
     </div>
 
+    <p>Battle Royale • 3D</p>
 
-    <div id="armaHud">
-
-      <div id="armaNome">
-        Pistola
-      </div>
-
-      <div id="municao">
-        <span id="balas">12</span>
-        /
-        <span id="reserva">60</span>
-      </div>
-
-    </div>
-
-
-    <div id="mira">
-      +
-    </div>
-
-
-    <button id="botaoHUD">
-      ⚙ HUD
+    <button id="startBtn" class="mainBtn">
+      JOGAR
     </button>
 
+    <button id="hudOpenBtn" class="secondaryBtn">
+      ⚙ PERSONALIZAR HUD
+    </button>
 
-    <div id="mensagem">
-      WASD • Mouse • Clique
+    <div class="tips">
+      <b>PC:</b> WASD • Mouse • Espaço • Shift • R
+      <br>
+      <b>Celular:</b> Joystick • Arraste a câmera • Botões
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud">
+
+    <div id="topLeft">
+
+      <div class="playerCard hudItem" data-hud="player">
+        <div class="avatar">P</div>
+
+        <div>
+          <b>JOGADOR</b>
+
+          <div class="healthOuter">
+            <div id="healthBar"></div>
+          </div>
+
+          <div class="shieldOuter">
+            <div id="shieldBar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="kills" class="hudItem">
+        ☠ <span id="killText">0</span>
+      </div>
+
+    </div>
+
+    <div id="zoneInfo" class="hudItem">
+      <span>◉</span>
+      <div>
+        <b>ZONA</b>
+        <small id="zoneText">150m</small>
+      </div>
+    </div>
+
+    <div id="miniMap" class="hudItem">
+      <canvas id="mapCanvas" width="150" height="150"></canvas>
+      <div class="mapPlayer"></div>
+    </div>
+
+    <div id="crosshair" class="hudItem">
+      <span></span>
+    </div>
+
+    <div id="weaponHUD" class="hudItem">
+
+      <div class="weaponInfo">
+        <small id="weaponName">PISTOLA</small>
+
+        <div class="ammo">
+          <strong id="ammoCurrent">12</strong>
+          <span>/</span>
+          <span id="ammoReserve">60</span>
+        </div>
+      </div>
+
+      <div class="weaponIcon" id="weaponIcon">
+        ◈
+      </div>
+
+    </div>
+
+    <div id="damageFlash"></div>
+
+    <div id="hitMarker">✦</div>
+
+    <div id="message"></div>
+
+    <!-- CONTROLES -->
+    <div id="mobileControls">
+
+      <div id="joystick">
+        <div id="joyKnob"></div>
+      </div>
+
+      <div id="actionButtons">
+
+        <button id="jumpBtn">⬆</button>
+        <button id="crouchBtn">⌄</button>
+        <button id="reloadBtn">↻</button>
+        <button id="aimBtn">◎</button>
+        <button id="fireBtn">●</button>
+
+      </div>
+
+      <button id="switchBtn">🔫</button>
+      <button id="runBtn">⚡</button>
+
     </div>
 
   </div>
 
+  <!-- MENU -->
+  <div id="pauseMenu" class="screen hidden">
+    <div class="panel">
 
-  <!-- MENU HUD -->
+      <h2>PAUSADO</h2>
 
-  <div id="menuHUD">
-
-    <div class="painel">
-
-      <button id="fecharHUD">
-        ✕
+      <button id="resumeBtn" class="mainBtn">
+        CONTINUAR
       </button>
 
-      <h2>Personalizar HUD</h2>
+      <button id="pauseHudBtn" class="secondaryBtn">
+        PERSONALIZAR HUD
+      </button>
 
-      <p>
-        Escolha quais elementos aparecem na tela.
-      </p>
+      <button id="restartBtn" class="secondaryBtn">
+        REINICIAR
+      </button>
 
-      <label>
-        <input type="checkbox" id="mostrarVida" checked>
-        Mostrar vida
-      </label>
+    </div>
+  </div>
 
-      <label>
-        <input type="checkbox" id="mostrarArma" checked>
-        Mostrar arma
-      </label>
+  <!-- EDITOR HUD -->
+  <div id="hudEditor" class="modal hidden">
 
-      <label>
-        <input type="checkbox" id="mostrarMira" checked>
-        Mostrar mira
-      </label>
+    <div class="editorPanel">
 
-      <label>
-        <input type="checkbox" id="mostrarLogo" checked>
-        Mostrar logo
-      </label>
-
-      <label>
-        <input type="checkbox" id="mostrarMensagem" checked>
-        Mostrar controles
-      </label>
-
-      <hr>
+      <div class="editorHeader">
+        <h2>EDITOR DE HUD</h2>
+        <button id="closeHud">×</button>
+      </div>
 
       <label>
         Tamanho do HUD
-
-        <input
-          type="range"
-          id="tamanhoHUD"
-          min="70"
-          max="130"
-          value="100">
+        <input id="hudScale" type="range" min="0.7" max="1.5" step="0.05" value="1">
       </label>
 
-      <button id="resetHUD">
-        Restaurar HUD
+      <label>
+        Transparência
+        <input id="hudOpacity" type="range" min="0.4" max="1" step="0.05" value="1">
+      </label>
+
+      <div class="checks">
+
+        <label>
+          <input type="checkbox" data-toggle="player" checked>
+          Vida / Escudo
+        </label>
+
+        <label>
+          <input type="checkbox" data-toggle="kills" checked>
+          Eliminações
+        </label>
+
+        <label>
+          <input type="checkbox" data-toggle="zoneInfo" checked>
+          Zona
+        </label>
+
+        <label>
+          <input type="checkbox" data-toggle="miniMap" checked>
+          Mini-mapa
+        </label>
+
+        <label>
+          <input type="checkbox" data-toggle="crosshair" checked>
+          Mira
+        </label>
+
+        <label>
+          <input type="checkbox" data-toggle="weaponHUD" checked>
+          Arma / munição
+        </label>
+
+      </div>
+
+      <button id="editPositions" class="secondaryBtn">
+        ↔ EDITAR POSIÇÕES
+      </button>
+
+      <button id="resetHud" class="secondaryBtn">
+        ↺ RESTAURAR HUD
+      </button>
+
+      <button id="saveHud" class="mainBtn">
+        SALVAR
       </button>
 
     </div>
 
   </div>
 
+  <!-- FINAL -->
+  <div id="endScreen" class="screen hidden">
 
-  <!-- CONTROLES MOBILE -->
+    <div class="panel">
 
-  <div id="mobile">
+      <h1 id="endTitle">VITÓRIA!</h1>
 
-    <div id="joystick">
-
-      <div id="joystickCentro"></div>
-
-    </div>
-
-
-    <button id="atirar">
-      🔥
-    </button>
-
-
-    <button id="trocar">
-      🔄
-    </button>
-
-
-    <button id="cameraEsq">
-      ↶
-    </button>
-
-
-    <button id="cameraDir">
-      ↷
-    </button>
-
-  </div>
-
-
-  <!-- TELA INICIAL -->
-
-  <div id="inicio">
-
-    <div class="inicioCaixa">
-
-      <h1>
-        MINI <span>BATTLE</span>
-      </h1>
-
-      <p>
-        Batalha leve em terceira pessoa
+      <p id="endText">
+        Você venceu a partida.
       </p>
 
-      <button id="iniciar">
-        JOGAR
+      <div class="stats">
+        <div>
+          <b id="finalKills">0</b>
+          <small>ELIMINAÇÕES</small>
+        </div>
+
+        <div>
+          <b id="finalTime">0:00</b>
+          <small>TEMPO</small>
+        </div>
+      </div>
+
+      <button id="endRestart" class="mainBtn">
+        JOGAR NOVAMENTE
       </button>
 
     </div>
 
   </div>
 
+  <!-- THREE.JS -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 
   <script src="script.js"></script>
 
 </body>
-
 </html>
