@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Mini Battle</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <canvas id="game"></canvas>
+
+  <!-- HUD -->
+
+  <div id="hud">
+
+    <div id="topHud">
+
+      <div id="logo">
+        MINI <span>BATTLE</span>
+      </div>
+
+      <div id="vidaBox">
+        <div class="vidaTexto">VIDA</div>
+
+        <div class="vidaFundo">
+          <div id="vidaBarra"></div>
+        </div>
+
+        <div id="vidaNumero">100</div>
+      </div>
+
+    </div>
+
+
+    <div id="armaHud">
+
+      <div id="armaNome">
+        Pistola
+      </div>
+
+      <div id="municao">
+        <span id="balas">12</span>
+        /
+        <span id="reserva">60</span>
+      </div>
+
+    </div>
+
+
+    <div id="mira">
+      +
+    </div>
+
+
+    <button id="botaoHUD">
+      ⚙ HUD
+    </button>
+
+
+    <div id="mensagem">
+      WASD • Mouse • Clique
+    </div>
+
+  </div>
+
+
+  <!-- MENU HUD -->
+
+  <div id="menuHUD">
+
+    <div class="painel">
+
+      <button id="fecharHUD">
+        ✕
+      </button>
+
+      <h2>Personalizar HUD</h2>
+
+      <p>
+        Escolha quais elementos aparecem na tela.
+      </p>
+
+      <label>
+        <input type="checkbox" id="mostrarVida" checked>
+        Mostrar vida
+      </label>
+
+      <label>
+        <input type="checkbox" id="mostrarArma" checked>
+        Mostrar arma
+      </label>
+
+      <label>
+        <input type="checkbox" id="mostrarMira" checked>
+        Mostrar mira
+      </label>
+
+      <label>
+        <input type="checkbox" id="mostrarLogo" checked>
+        Mostrar logo
+      </label>
+
+      <label>
+        <input type="checkbox" id="mostrarMensagem" checked>
+        Mostrar controles
+      </label>
+
+      <hr>
+
+      <label>
+        Tamanho do HUD
+
+        <input
+          type="range"
+          id="tamanhoHUD"
+          min="70"
+          max="130"
+          value="100">
+      </label>
+
+      <button id="resetHUD">
+        Restaurar HUD
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- CONTROLES MOBILE -->
+
+  <div id="mobile">
+
+    <div id="joystick">
+
+      <div id="joystickCentro"></div>
+
+    </div>
+
+
+    <button id="atirar">
+      🔥
+    </button>
+
+
+    <button id="trocar">
+      🔄
+    </button>
+
+
+    <button id="cameraEsq">
+      ↶
+    </button>
+
+
+    <button id="cameraDir">
+      ↷
+    </button>
+
+  </div>
+
+
+  <!-- TELA INICIAL -->
+
+  <div id="inicio">
+
+    <div class="inicioCaixa">
+
+      <h1>
+        MINI <span>BATTLE</span>
+      </h1>
+
+      <p>
+        Batalha leve em terceira pessoa
+      </p>
+
+      <button id="iniciar">
+        JOGAR
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
