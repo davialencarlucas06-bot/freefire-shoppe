@@ -1,651 +1,897 @@
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 html,
 body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #05070b;
-  font-family: Arial, Helvetica, sans-serif;
-  color: white;
-  touch-action: none;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #080b10;
+    color: white;
 }
 
-#game {
-  position: fixed;
-  inset: 0;
+button,
+input,
+select {
+    font: inherit;
 }
 
-canvas {
-  display: block;
+button {
+    cursor: pointer;
+    border: none;
 }
 
-/* TELAS */
 
-.screen {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+/* ================= LOBBY ================= */
 
-  background:
-    radial-gradient(circle at center, rgba(35, 55, 80, .35), rgba(2, 4, 8, .96));
+#lobby {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+}
+
+.lobby-background {
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at 70% 35%,
+            rgba(60, 100, 150, .45),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #070a0f,
+            #101925,
+            #06080c
+        );
+}
+
+.lobby-background::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            115deg,
+            transparent 0 35%,
+            rgba(255,255,255,.025) 36%,
+            transparent 37%
+        );
+
+    background-size: 80px 80px;
+}
+
+
+.lobby-content {
+    position: relative;
+
+    width: 100%;
+    max-width: 520px;
+
+    min-height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+}
+
+
+.game-logo {
+    position: relative;
+
+    text-align: center;
+
+    font-style: italic;
+    letter-spacing: 4px;
+
+    margin-bottom: 5px;
+}
+
+.game-logo span {
+    display: block;
+
+    font-size: 46px;
+    font-weight: 900;
+}
+
+.game-logo strong {
+    display: block;
+
+    font-size: 70px;
+    font-weight: 1000;
+
+    line-height: .8;
+}
+
+.game-logo small {
+    display: block;
+
+    margin-top: 10px;
+
+    font-size: 18px;
+    letter-spacing: 10px;
+}
+
+
+.subtitle {
+    margin: 22px 0;
+
+    font-size: 12px;
+    letter-spacing: 4px;
+
+    opacity: .65;
+}
+
+
+.player-card {
+    width: 100%;
+    max-width: 350px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.1);
+
+    margin-bottom: 20px;
+}
+
+.avatar-preview {
+    position: relative;
+
+    width: 60px;
+    height: 60px;
+
+    overflow: hidden;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #27394b,
+            #10151c
+        );
+}
+
+.avatar-head {
+    position: absolute;
+
+    width: 22px;
+    height: 22px;
+
+    border-radius: 50%;
+
+    background: #c98e67;
+
+    left: 19px;
+    top: 9px;
+}
+
+.avatar-body {
+    position: absolute;
+
+    width: 38px;
+    height: 34px;
+
+    border-radius: 10px 10px 0 0;
+
+    background: #263a52;
+
+    left: 11px;
+    bottom: 0;
+}
+
+
+.player-card h2 {
+    font-size: 15px;
+}
+
+.player-card p {
+    font-size: 12px;
+    opacity: .55;
+    margin-top: 5px;
+}
+
+
+.main-button,
+.secondary-button {
+    width: 100%;
+    max-width: 350px;
+
+    min-height: 55px;
+
+    border-radius: 12px;
+
+    font-weight: 900;
+    letter-spacing: 1px;
+
+    transition: .2s;
+}
+
+.main-button {
+    background: #fff;
+    color: #080a0e;
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.3);
+}
+
+.main-button:hover {
+    transform: translateY(-2px);
+}
+
+.secondary-button {
+    margin-top: 10px;
+
+    background: rgba(255,255,255,.08);
+
+    color: white;
+
+    border: 1px solid rgba(255,255,255,.12);
+}
+
+.version {
+    position: absolute;
+
+    bottom: 18px;
+
+    font-size: 9px;
+    opacity: .35;
+}
+
+
+/* ================= MODAL ================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0,0,0,.75);
+}
+
+.modal-box {
+    position: relative;
+
+    width: min(90%, 400px);
+
+    padding: 30px;
+
+    border-radius: 18px;
+
+    background: #11161e;
+
+    border: 1px solid rgba(255,255,255,.1);
+
+    box-shadow: 0 20px 80px rgba(0,0,0,.6);
+}
+
+.modal-box h2 {
+    margin-bottom: 25px;
+}
+
+.modal-box label {
+    display: block;
+
+    margin-bottom: 20px;
+
+    font-size: 13px;
+}
+
+.modal-box select,
+.modal-box input[type="range"] {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.modal-box select {
+    padding: 10px;
+
+    color: white;
+    background: #202733;
+
+    border: none;
+    border-radius: 8px;
+}
+
+.switch-line {
+    display: flex !important;
+    justify-content: space-between;
+}
+
+.close {
+    position: absolute;
+
+    right: 15px;
+    top: 12px;
+
+    background: none;
+
+    color: white;
+
+    font-size: 30px;
 }
 
 .hidden {
-  display: none !important;
+    display: none !important;
 }
 
-/* LOGO */
 
-.logo {
-  font-size: 58px;
-  font-weight: 900;
-  letter-spacing: 4px;
-  text-align: center;
-  line-height: .85;
-  text-shadow: 0 5px 25px rgba(0, 0, 0, .8);
+/* ================= GAME ================= */
+
+#game {
+    position: fixed;
+    inset: 0;
 }
 
-.logo span {
-  display: block;
+#gameCanvas {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
 }
 
-.logo strong {
-  font-size: 70px;
+
+/* ================= TOP HUD ================= */
+
+#topHud {
+    position: absolute;
+
+    top: 18px;
+    left: 18px;
+    right: 18px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    pointer-events: none;
 }
 
-.logo small {
-  font-size: 20px;
-  letter-spacing: 8px;
+
+.status-box {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 9px 12px;
+
+    border-radius: 10px;
+
+    background: rgba(5,8,12,.7);
+
+    backdrop-filter: blur(8px);
 }
 
-.screen > p {
-  margin: 25px 0;
-  opacity: .65;
+.player-icon {
+    width: 34px;
+    height: 34px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: #222b36;
 }
 
-/* BOTÕES */
-
-button {
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-  user-select: none;
+.bars {
+    width: 130px;
 }
 
-.mainBtn,
-.secondaryBtn {
-  min-width: 240px;
-  padding: 16px 25px;
-  margin: 7px;
-  border-radius: 12px;
-  font-size: 16px;
+.health-bar,
+.shield-bar {
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.15);
+
+    margin: 3px 0;
 }
 
-.mainBtn {
-  background: linear-gradient(135deg, #1b9cff, #725cff);
-  box-shadow: 0 10px 35px rgba(45, 125, 255, .35);
+.health-bar span,
+.shield-bar span {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    transition: width .2s;
 }
 
-.secondaryBtn {
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.15);
+.health-bar span {
+    background: #62d17c;
 }
 
-.mainBtn:active,
-.secondaryBtn:active {
-  transform: scale(.97);
+.shield-bar span {
+    background: #5bb9ff;
 }
 
-.tips {
-  margin-top: 25px;
-  font-size: 12px;
-  line-height: 1.7;
-  text-align: center;
-  opacity: .55;
+
+.match-info,
+.zone-info {
+    display: flex;
+    gap: 15px;
+
+    padding: 11px 15px;
+
+    border-radius: 10px;
+
+    background: rgba(5,8,12,.7);
+
+    backdrop-filter: blur(8px);
+
+    font-size: 13px;
 }
 
-/* HUD */
-
-#hud {
-  position: fixed;
-  inset: 0;
-  z-index: 20;
-  pointer-events: none;
+.zone-info {
+    display: block;
+    text-align: center;
 }
 
-.hudItem {
-  pointer-events: auto;
-  user-select: none;
+.zone-info strong {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 16px;
 }
 
-/* PLAYER */
 
-#topLeft {
-  position: absolute;
-  top: 18px;
-  left: 18px;
-}
-
-.playerCard {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 9px 12px;
-  min-width: 210px;
-
-  background: rgba(5,10,18,.75);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg,#317cff,#8a5cff);
-  font-weight: 900;
-}
-
-.healthOuter,
-.shieldOuter {
-  width: 145px;
-  height: 6px;
-  margin-top: 5px;
-  border-radius: 5px;
-  background: rgba(255,255,255,.12);
-  overflow: hidden;
-}
-
-#healthBar {
-  width: 100%;
-  height: 100%;
-  background: #42e878;
-}
-
-#shieldBar {
-  width: 70%;
-  height: 100%;
-  background: #55b8ff;
-}
-
-#kills {
-  margin-top: 10px;
-  display: inline-block;
-  padding: 8px 13px;
-  border-radius: 10px;
-  background: rgba(5,10,18,.7);
-}
-
-/* ZONA */
-
-#zoneInfo {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  display: flex;
-  gap: 8px;
-  align-items: center;
-
-  padding: 8px 15px;
-  border-radius: 12px;
-  background: rgba(5,10,18,.7);
-}
-
-#zoneInfo > span {
-  font-size: 25px;
-}
-
-#zoneInfo small {
-  display: block;
-  opacity: .65;
-}
-
-/* MINI MAP */
+/* ================= MINIMAP ================= */
 
 #miniMap {
-  position: absolute;
-  right: 18px;
-  top: 18px;
+    position: absolute;
 
-  width: 150px;
-  height: 150px;
+    top: 100px;
+    right: 18px;
 
-  border: 3px solid rgba(255,255,255,.75);
-  border-radius: 50%;
-  overflow: hidden;
+    width: 180px;
+    height: 180px;
 
-  background: #17232d;
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    border: 3px solid rgba(255,255,255,.35);
+
+    background: rgba(5,8,10,.7);
+
+    box-shadow: 0 5px 25px rgba(0,0,0,.4);
 }
 
 #mapCanvas {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
-.mapPlayer {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 9px;
-  height: 9px;
-  transform: translate(-50%,-50%);
-  border-radius: 50%;
-  background: white;
-  box-shadow: 0 0 10px white;
-}
 
-/* MIRA */
+/* ================= CROSSHAIR ================= */
 
 #crosshair {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 28px;
-  height: 28px;
-  transform: translate(-50%,-50%);
-}
+    position: absolute;
 
-#crosshair::before,
-#crosshair::after {
-  content: "";
-  position: absolute;
-  background: white;
-  opacity: .9;
-}
+    left: 50%;
+    top: 50%;
 
-#crosshair::before {
-  width: 2px;
-  height: 28px;
-  left: 13px;
-}
+    width: 24px;
+    height: 24px;
 
-#crosshair::after {
-  height: 2px;
-  width: 28px;
-  top: 13px;
+    transform: translate(-50%, -50%);
+
+    pointer-events: none;
 }
 
 #crosshair span {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  width: 8px;
-  height: 8px;
-  border: 2px solid white;
-  border-radius: 50%;
+    position: absolute;
+
+    background: white;
+
+    border-radius: 2px;
 }
 
-/* ARMA */
+#crosshair span:nth-child(1) {
+    width: 7px;
+    height: 2px;
 
-#weaponHUD {
-  position: absolute;
-  right: 20px;
-  bottom: 25px;
-
-  min-width: 250px;
-  padding: 14px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  border-radius: 16px;
-  background: rgba(5,10,18,.8);
-  backdrop-filter: blur(12px);
+    left: 0;
+    top: 11px;
 }
 
-.weaponInfo small {
-  opacity: .6;
-  font-weight: bold;
+#crosshair span:nth-child(2) {
+    width: 7px;
+    height: 2px;
+
+    right: 0;
+    top: 11px;
+}
+
+#crosshair span:nth-child(3) {
+    width: 2px;
+    height: 7px;
+
+    left: 11px;
+    top: 0;
+}
+
+#crosshair span:nth-child(4) {
+    width: 2px;
+    height: 7px;
+
+    left: 11px;
+    bottom: 0;
+}
+
+
+#hitMarker {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%,-50%);
+
+    font-size: 38px;
+
+    opacity: 0;
+
+    transition: .1s;
+
+    pointer-events: none;
+}
+
+
+/* ================= MESSAGE ================= */
+
+#message {
+    position: absolute;
+
+    top: 32%;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    background: rgba(0,0,0,.65);
+
+    font-weight: bold;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: .25s;
+}
+
+
+/* ================= WEAPON ================= */
+
+#weaponHud {
+    position: absolute;
+
+    right: 25px;
+    bottom: 25px;
+
+    text-align: right;
+}
+
+.weapon-name {
+    font-size: 14px;
+
+    letter-spacing: 2px;
+
+    opacity: .8;
 }
 
 .ammo {
-  margin-top: 3px;
-  font-size: 28px;
+    font-size: 20px;
+
+    margin: 4px 0;
 }
 
 .ammo strong {
-  font-size: 38px;
+    font-size: 38px;
 }
 
-.weaponIcon {
-  font-size: 48px;
-  opacity: .8;
+.ammo span {
+    opacity: .5;
 }
 
-/* DANO */
+.weapon-actions {
+    display: flex;
+    justify-content: flex-end;
 
-#damageFlash {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,0,0,.3);
-  opacity: 0;
-  pointer-events: none;
+    gap: 8px;
 }
 
-#hitMarker {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%);
-  font-size: 30px;
-  opacity: 0;
+.weapon-actions button {
+    width: 45px;
+    height: 40px;
+
+    border-radius: 9px;
+
+    background: rgba(0,0,0,.6);
+
+    color: white;
+
+    font-size: 18px;
 }
 
-/* MENSAGEM */
 
-#message {
-  position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translateX(-50%);
+/* ================= HELP ================= */
 
-  padding: 10px 20px;
-  border-radius: 20px;
+#desktopHelp {
+    position: absolute;
 
-  background: rgba(0,0,0,.55);
+    left: 20px;
+    bottom: 20px;
 
-  opacity: 0;
-  transition: .3s;
+    padding: 8px 12px;
+
+    font-size: 10px;
+
+    opacity: .45;
 }
 
-/* CELULAR */
+#desktopHelp span {
+    margin-left: 10px;
+
+    padding: 3px 5px;
+
+    border-radius: 4px;
+
+    background: rgba(255,255,255,.15);
+}
+
+
+/* ================= MOBILE ================= */
 
 #mobileControls {
-  display: none;
+    display: none;
+}
+
+.mobile-button {
+    position: absolute;
+
+    width: 58px;
+    height: 58px;
+
+    border-radius: 50%;
+
+    color: white;
+
+    background: rgba(20,25,32,.7);
+
+    border: 1px solid rgba(255,255,255,.18);
+
+    font-size: 20px;
 }
 
 #joystick {
-  position: absolute;
-  bottom: 35px;
-  left: 30px;
+    position: absolute;
 
-  width: 130px;
-  height: 130px;
+    left: 25px;
+    bottom: 35px;
 
-  border-radius: 50%;
-  background: rgba(255,255,255,.08);
-  border: 2px solid rgba(255,255,255,.15);
-  pointer-events: auto;
+    width: 125px;
+    height: 125px;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.08);
+
+    border: 1px solid rgba(255,255,255,.15);
 }
 
-#joyKnob {
-  position: absolute;
+#stick {
+    position: absolute;
 
-  width: 58px;
-  height: 58px;
+    left: 50%;
+    top: 50%;
 
-  left: 50%;
-  top: 50%;
+    width: 55px;
+    height: 55px;
 
-  transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
 
-  border-radius: 50%;
-  background: rgba(255,255,255,.3);
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.25);
 }
 
-#actionButtons {
-  position: absolute;
-  right: 25px;
-  bottom: 25px;
+.fire {
+    right: 25px;
+    bottom: 55px;
 
-  width: 190px;
-  height: 230px;
+    width: 80px;
+    height: 80px;
+
+    background: rgba(150,30,30,.65);
 }
 
-#actionButtons button,
-#switchBtn,
-#runBtn {
-  position: absolute;
-
-  border-radius: 50%;
-
-  background: rgba(10,15,25,.65);
-  border: 1px solid rgba(255,255,255,.2);
-
-  backdrop-filter: blur(8px);
-
-  font-size: 22px;
+.aim {
+    right: 120px;
+    bottom: 70px;
 }
 
-#fireBtn {
-  width: 82px !important;
-  height: 82px !important;
-  right: 0;
-  bottom: 55px;
-  background: rgba(255,255,255,.18) !important;
+.jump {
+    right: 25px;
+    bottom: 150px;
 }
 
-#aimBtn {
-  width: 55px;
-  height: 55px;
-  right: 100px;
-  bottom: 60px;
+.run {
+    left: 160px;
+    bottom: 40px;
 }
 
-#reloadBtn {
-  width: 48px;
-  height: 48px;
-  right: 105px;
-  bottom: 5px;
+.reload {
+    right: 115px;
+    bottom: 170px;
 }
 
-#jumpBtn {
-  width: 48px;
-  height: 48px;
-  right: 55px;
-  bottom: 145px;
+.switch {
+    right: 190px;
+    bottom: 170px;
 }
 
-#crouchBtn {
-  width: 45px;
-  height: 45px;
-  right: 115px;
-  bottom: 135px;
+
+/* ================= OVERLAY ================= */
+
+.overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 50;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0,0,0,.7);
+
+    backdrop-filter: blur(8px);
 }
 
-#switchBtn {
-  width: 58px;
-  height: 58px;
-  right: 25px;
-  bottom: 245px;
+.pause-box,
+.end-box {
+    width: min(90%, 400px);
+
+    padding: 35px;
+
+    text-align: center;
+
+    border-radius: 20px;
+
+    background: #10151d;
+
+    border: 1px solid rgba(255,255,255,.1);
 }
 
-#runBtn {
-  width: 50px;
-  height: 50px;
-  left: 170px;
-  bottom: 65px;
+.pause-box h1,
+.end-box h1 {
+    margin-bottom: 20px;
 }
 
-/* PAINEL */
+#endIcon {
+    font-size: 60px;
 
-.panel {
-  padding: 35px;
-  min-width: 310px;
-  text-align: center;
-
-  border-radius: 20px;
-
-  background: rgba(10,15,24,.92);
-  border: 1px solid rgba(255,255,255,.12);
-
-  box-shadow: 0 20px 80px rgba(0,0,0,.7);
+    margin-bottom: 10px;
 }
 
-.panel h1,
-.panel h2 {
-  margin-bottom: 20px;
+.results {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 45px;
+
+    margin: 25px 0;
 }
 
-/* EDITOR */
-
-.modal {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: rgba(0,0,0,.7);
-}
-
-.editorPanel {
-  width: min(430px,90vw);
-  max-height: 90vh;
-  overflow-y: auto;
-
-  padding: 22px;
-
-  border-radius: 20px;
-
-  background: #0d141f;
-  border: 1px solid rgba(255,255,255,.12);
-}
-
-.editorHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.editorHeader button {
-  background: transparent;
-  font-size: 30px;
-}
-
-.editorPanel > label {
-  display: block;
-  margin: 17px 0;
-}
-
-.editorPanel input[type="range"] {
-  width: 100%;
-  margin-top: 8px;
-}
-
-.checks {
-  display: grid;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.checks label {
-  padding: 11px;
-  border-radius: 10px;
-  background: rgba(255,255,255,.05);
-}
-
-/* ESTATÍSTICAS */
-
-.stats {
-  display: flex;
-  justify-content: center;
-  gap: 35px;
-  margin: 25px;
-}
-
-.stats b {
-  display: block;
-  font-size: 30px;
-}
-
-.stats small {
-  opacity: .5;
-}
-
-/* DESKTOP */
-
-@media (min-width: 800px) {
-
-  #hud {
-    --hud-scale: 1;
-  }
-
-}
-
-/* MOBILE */
-
-@media (max-width: 800px) {
-
-  #mobileControls {
+.results strong {
     display: block;
-  }
 
-  #miniMap {
-    width: 105px;
-    height: 105px;
-  }
-
-  #weaponHUD {
-    right: 15px;
-    bottom: 15px;
-    min-width: 190px;
-  }
-
-  .weaponIcon {
-    font-size: 35px;
-  }
-
-  .ammo {
-    font-size: 18px;
-  }
-
-  .ammo strong {
-    font-size: 27px;
-  }
-
-  #topLeft {
-    top: 12px;
-    left: 12px;
-  }
-
-  .playerCard {
-    min-width: 175px;
-    padding: 7px;
-  }
-
-  .healthOuter,
-  .shieldOuter {
-    width: 110px;
-  }
-
-  #zoneInfo {
-    top: 10px;
-  }
-
-  .logo {
-    font-size: 42px;
-  }
-
-  .logo strong {
-    font-size: 54px;
-  }
-
-  .tips {
-    max-width: 280px;
-  }
+    font-size: 30px;
 }
 
-.hudEditing .hudItem {
-  outline: 2px dashed rgba(70,170,255,.9);
-  cursor: move;
+.results span {
+    display: block;
+
+    font-size: 9px;
+
+    opacity: .5;
+
+    margin-top: 5px;
+}
+
+
+/* ================= RESPONSIVO ================= */
+
+@media (max-width: 700px) {
+
+    .game-logo span {
+        font-size: 32px;
+    }
+
+    .game-logo strong {
+        font-size: 55px;
+    }
+
+    #miniMap {
+        width: 120px;
+        height: 120px;
+
+        top: 85px;
+    }
+
+    #desktopHelp {
+        display: none;
+    }
+
+    #mobileControls {
+        display: block;
+    }
+
+    #weaponHud {
+        right: 15px;
+        bottom: 15px;
+    }
+
+    .ammo strong {
+        font-size: 30px;
+    }
+
+    .bars {
+        width: 90px;
+    }
+
+    .match-info {
+        font-size: 11px;
+        padding: 8px;
+    }
+
+    .zone-info {
+        font-size: 10px;
+        padding: 8px;
+    }
 }
